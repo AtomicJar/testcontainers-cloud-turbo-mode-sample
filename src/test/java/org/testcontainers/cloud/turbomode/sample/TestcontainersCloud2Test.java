@@ -43,10 +43,4 @@ public class TestcontainersCloud2Test {
         Optional<String> foundObject = cache.get("bar", String.class);
         assertThat(foundObject.isPresent()).as("When an object that's not in the cache is retrieved, nothing is found").isFalse();
     }
-
-    @Test
-    public void justSleep() throws InterruptedException {
-        Thread.sleep(10000);
-        assertThat(true).isTrue();
-    }
 }
