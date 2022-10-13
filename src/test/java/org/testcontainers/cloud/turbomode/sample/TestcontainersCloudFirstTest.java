@@ -5,20 +5,20 @@ import com.github.dockerjava.api.model.Info;
 import org.junit.jupiter.api.Test;
 import org.testcontainers.DockerClientFactory;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class TestcontainersCloudFirstTest {
 
-  @Test
-  public void testcontainersCloudDockerEngine() {
-    DockerClient client = DockerClientFactory.instance().client();
-    Info dockerInfo = client.infoCmd().exec();
+    @Test
+    public void testcontainersCloudDockerEngine() {
+        DockerClient client = DockerClientFactory.instance().client();
+        Info dockerInfo = client.infoCmd().exec();
 
-    assertThat(dockerInfo.getServerVersion())
-      .as("Docker Client is connected to Testcontainers Cloud")
-      .contains("testcontainerscloud");
+        assertNotNull(dockerInfo.getServerVersion());
+        assertTrue(dockerInfo.getServerVersion().contains("testcontainerscloud"));
 
-    System.out.println(PrettyStrings.logo);
-  }
+        System.out.println(PrettyStrings.logo);
+    }
 
 }
