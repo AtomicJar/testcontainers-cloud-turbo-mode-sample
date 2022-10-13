@@ -8,10 +8,7 @@ import org.testcontainers.junit.jupiter.Testcontainers;
 import org.testcontainers.utility.DockerImageName;
 
 @Testcontainers
-public class TestcontainersCloud3Test {
-
-    @Container
-    private KafkaContainer kafka = new KafkaContainer(DockerImageName.parse("confluentinc/cp-kafka:6.2.1"));
+public class TestcontainersCloud3Test extends AbstractIntegrationTest {
 
     @Test
     public void testFindingAnInsertedValue() {
