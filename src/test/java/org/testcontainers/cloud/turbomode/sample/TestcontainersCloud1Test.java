@@ -5,7 +5,7 @@ import org.junit.jupiter.api.Test;
 public class TestcontainersCloud1Test extends AbstractIntegrationTest {
 
     @Test
-    public void writeAndVerify() {
+    void writeAndVerify() {
         writeAndVerify("clientId1", "topic1", 100000);
     }
 }

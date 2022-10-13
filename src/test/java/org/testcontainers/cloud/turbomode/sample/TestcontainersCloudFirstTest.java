@@ -11,7 +11,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 public class TestcontainersCloudFirstTest {
 
     @Test
-    public void testcontainersCloudDockerEngine() {
+    void testcontainersCloudDockerEngine() {
         DockerClient client = DockerClientFactory.instance().client();
         Info dockerInfo = client.infoCmd().exec();
 
