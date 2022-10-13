@@ -4,13 +4,14 @@ import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.clients.consumer.ConsumerRecords;
 import org.apache.kafka.clients.consumer.KafkaConsumer;
 import org.apache.kafka.common.serialization.StringDeserializer;
-import org.awaitility.Duration;
 import org.testcontainers.containers.KafkaContainer;
 import org.testcontainers.utility.DockerImageName;
 
+import java.time.Duration;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import static java.time.temporal.ChronoUnit.MINUTES;
 import static org.awaitility.Awaitility.await;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -49,7 +50,7 @@ public class AbstractIntegrationTest {
         KafkaConsumer<String, String> consumer = createConsumer(topic);
 
         AtomicInteger readMessages = new AtomicInteger();
-        await().atMost(Duration.TWO_MINUTES).untilAsserted(() -> {
+        await().atMost(Duration.of(2, MINUTES)).untilAsserted(() -> {
             ConsumerRecords<String, String> records = consumer.poll(100);
             readMessages.addAndGet(records.count());
             assertEquals(readMessages.get(), messageCount);
