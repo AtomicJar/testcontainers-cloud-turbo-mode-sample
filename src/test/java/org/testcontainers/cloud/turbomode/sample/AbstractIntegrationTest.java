@@ -1,7 +1,6 @@
 package org.testcontainers.cloud.turbomode.sample;
 
 import org.apache.kafka.clients.consumer.ConsumerConfig;
-import org.apache.kafka.clients.consumer.ConsumerRecords;
 import org.apache.kafka.clients.consumer.KafkaConsumer;
 import org.apache.kafka.common.serialization.StringDeserializer;
 import org.testcontainers.containers.KafkaContainer;
@@ -9,11 +8,10 @@ import org.testcontainers.utility.DockerImageName;
 
 import java.time.Duration;
 import java.util.*;
-import java.util.concurrent.atomic.AtomicInteger;
 
 import static java.time.temporal.ChronoUnit.MINUTES;
 import static org.awaitility.Awaitility.await;
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class AbstractIntegrationTest {
 
@@ -39,20 +37,22 @@ public class AbstractIntegrationTest {
     }
 
     protected void writeAndVerify(String clientId, String topic, int messageCount) {
-        EventWriter notifier = new EventWriter(kafka.getBootstrapServers(), clientId, topic);
-        String notificationMessage = "foobar";
+        var allIds = new ArrayList<>();
+        var notifier = new EventWriter(kafka.getBootstrapServers(), clientId, topic);
         for (int i = 0; i < messageCount; i++) {
-            notifier.sendNotification(notificationMessage);
+            var uuid = UUID.randomUUID().toString();
+            notifier.sendNotification(uuid);
+            allIds.add(uuid);
         }
 
         // use consumer to check received records
         KafkaConsumer<String, String> consumer = createConsumer(topic);
-
-        AtomicInteger readMessages = new AtomicInteger();
         await().atMost(Duration.of(2, MINUTES)).untilAsserted(() -> {
-            ConsumerRecords<String, String> records = consumer.poll(100);
-            readMessages.addAndGet(records.count());
-            assertEquals(readMessages.get(), messageCount);
+
+            consumer.poll(Duration.ofMillis(100))
+                    .forEach(each -> allIds.remove(each.value()));
+
+            assertTrue(allIds.isEmpty());
         });
     }
 }
