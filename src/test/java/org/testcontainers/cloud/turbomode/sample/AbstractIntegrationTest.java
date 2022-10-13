@@ -38,10 +38,9 @@ public class AbstractIntegrationTest {
         return consumer;
     }
 
-    protected void writeAndVerify(String clientId, String topic) {
+    protected void writeAndVerify(String clientId, String topic, int messageCount) {
         EventWriter notifier = new EventWriter(kafka.getBootstrapServers(), clientId, topic);
         String notificationMessage = "foobar";
-        int messageCount = 100000;
         for (int i = 0; i < messageCount; i++) {
             notifier.sendNotification(notificationMessage);
         }

@@ -8,6 +8,6 @@ public class TestcontainersCloud1Test extends AbstractIntegrationTest {
 
     @Test
     public void writeAndVerify() {
-        writeAndVerify("clientId1", "topic1");
+        writeAndVerify("clientId1", "topic1", 100000);
     }
 }
